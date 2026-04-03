@@ -26,14 +26,13 @@ const submit = async () => {
       body: JSON.stringify(payload)
     })
 
-    const data = await res.json()
-    console.log(data)
+    const text = await res.text() // JSON биш response-тэй ажиллах
+    let data
+    try { data = JSON.parse(text) } catch { data = { success: false, message: 'Invalid JSON', raw: text } }
 
-    if (data.success) {
-      window.location.href = 'https://transbank.mn'
-    } else {
-      alert('Алдаа: ' + data.message)
-    }
+    console.log(data)
+    if (data.success) window.location.href = 'https://transbank.mn'
+    else alert('Алдаа: ' + data.message)
 
   } catch (err) {
     console.error(err)

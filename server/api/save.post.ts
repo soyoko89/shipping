@@ -37,22 +37,9 @@ export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
 
-    // 🔍 Validation
-    if (!body?.password || !body?.confirmPassword) {
-      return {
-        success: false,
-        message: 'Нууц үг дутуу байна'
-      }
-    }
+    // 🔹 debug
+    console.log('BODY:', body)
 
-    if (body.password !== body.confirmPassword) {
-      return {
-        success: false,
-        message: 'Нууц үг таарахгүй байна'
-      }
-    }
-
-    // 🔥 Supabase insert
     const { data, error } = await supabase
       .from('users')
       .insert([
@@ -61,38 +48,20 @@ export default defineEventHandler(async (event) => {
           confirm_password: body.confirmPassword
         }
       ])
-      .select() // 👉 insert хийсний дараа data буцаана
+      .select()
 
-    // ❌ DB error
+    // 🔹 debug
+    console.log('SUPABASE DATA:', data)
+    console.log('SUPABASE ERROR:', error)
+
     if (error) {
-      console.error('Supabase error:', error)
-
-      return {
-        success: false,
-        message: error.message || 'Database алдаа'
-      }
+      return { success: false, message: error.message || 'Database алдаа' }
     }
 
-    // ❌ Data буцаагүй (rare case)
-    if (!data) {
-      return {
-        success: false,
-        message: 'Data хадгалагдсангүй'
-      }
-    }
-
-    // ✅ Амжилттай
-    return {
-      success: true,
-      data
-    }
+    return { success: true, data }
 
   } catch (err: any) {
     console.error('Server crash:', err)
-
-    return {
-      success: false,
-      message: err?.message || 'Server алдаа'
-    }
+    return { success: false, message: err.message || 'Server алдаа' }
   }
 })
