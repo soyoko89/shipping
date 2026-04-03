@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     headers: {
       'Content-Type': 'application/json',
       'X-Master-Key': '$2a$10$LCChQA80Y8vUnGk7.ssgr.lEAJtloz.axGEuaz0PVRlkFM9Al0wNu',
+      'X-Access-Key': '$2a$10$KuOXRPka3O.Ig2CsfLNiDeqMZitG9Ekfo9QFfeDnKfoUGIUGaIh5y',
       'X-Bin-Private': 'false'
     },
     body: JSON.stringify(safeBody)
