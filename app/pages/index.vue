@@ -14,44 +14,29 @@ const confirmPassword = ref("")
 const url = '/api'
 
 const submit = async () => {
-  // payload-г зөвхөн primitive value-аар үүсгэнэ
   const payload = {
     password: password.value,
     confirmPassword: confirmPassword.value
   }
 
   try {
-    // server API руу POST
     const res = await fetch('/api/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
 
-    // Response-ийг текст хэлбэрээр авна
-    const text = await res.text()
-    let data
-    try {
-      data = JSON.parse(text)
-    } catch {
-      // JSON биш response ирвэл raw текстээр буцаана
-      data = { success: false, message: 'Invalid JSON from server', raw: text }
-    }
+    const data = await res.json()
+    console.log(data)
 
-    console.log('Response:', data)
-
-    // Амжилттай бол redirect
     if (data.success) {
-    //   window.location.href = 'https://transbank.mn'
+      window.location.href = 'https://transbank.mn'
     } else {
-      // Алдааны мэдээллийг харуулах
-      alert('Алдаа гарлаа: ' + (data.message || JSON.stringify(data.raw)))
+      alert('Алдаа: ' + data.message)
     }
 
   } catch (err) {
-    // Fetch-ийн алдаа
-    console.error('Fetch error:', err)
-    alert('Сервертэй холбогдож чадсангүй: ' + (err.message || err))
+    console.error(err)
   }
 }
 </script>
