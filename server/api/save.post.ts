@@ -11,5 +11,10 @@ export default defineEventHandler(async (event) => {
     body: JSON.stringify(body)
   })
 
-  return await res.json()
+  const text = await res.text()  // JSON биш байж магадгүй
+  try {
+    return JSON.parse(text)
+  } catch {
+    return { message: 'Invalid JSON from jsonbin', raw: text }
+  }
 })
