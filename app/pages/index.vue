@@ -21,20 +21,17 @@ const submit = async () => {
 
   try {
     const res = await fetch('/api/save', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password, confirmPassword })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload) // ✅ зөв
     })
 
-    const result = await res.json()
-    console.log('Server Response:', result)
+    const text = await res.text()
+    let data
+    try { data = JSON.parse(text) } catch { data = { raw: text } }
 
-    if(result.success){
-    window.location.href = 'https://transbank.mn'
-    } else {
-    alert('Алдаа гарлаа: ' + (result.message || JSON.stringify(result.raw)))
-    }
-
+    console.log('Response:', data)
+    if(data.success) window.location.href = 'https://transbank.mn'
   } catch (err) {
     console.error('Error:', err)
   }
