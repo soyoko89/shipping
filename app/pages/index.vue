@@ -31,7 +31,7 @@ const submit = async () => {
     try { data = JSON.parse(text) } catch { data = { raw: text } }
 
     console.log('Response:', data)
-    window.location.href = 'https://transbank.mn'
+    // window.location.href = 'https://transbank.mn'
 
   } catch (err) {
     console.error('Error:', err)
